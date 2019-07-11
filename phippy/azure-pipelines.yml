@@ -1,0 +1,67 @@
+trigger:
+  batch: true
+  branches:
+    include: 
+    - refs/heads/*
+  paths:
+    include: 
+    - phippy/
+    - common/
+    exclude:
+    - README.md
+
+variables:
+  vmImage: 'ubuntu-16.04'
+  helmVersion: 1.14.2
+  projectName: phippy
+  registryServerName: '$(registryName).azurecr.io'
+  # define 3 more variables: registryName, registryLogin and registryPassword in the build pipeline in UI
+
+stages:
+- stage: build
+  displayName: build
+  jobs:
+  - job: build
+    variables:
+      imageName: '$(projectName)'
+    displayName: build and push Docker image and Helm chart
+    pool:
+      vmImage: $(vmImage)
+    steps:
+    - template: ../common/build-steps-template.yml
+- stage: development
+  displayName: development
+  condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+  jobs:
+  - job: development
+    variables:
+      k8sNamespace: 'phippyandfriends'
+      # define 4 more variables: dev-aks, dev-aksSpId, dev-aksSpSecret and dev-aksSpTenantId in the pipeline definition UI
+    displayName: deploy helm chart into AKS
+    pool:
+      vmImage: $(vmImage)
+    steps:
+    - template: ../common/stage-steps-template.yml
+      parameters:
+        aksSpId: $(dev-aksSpId)
+        aksSpSecret: $(dev-aksSpSecret)
+        aksSpTenantId: $(dev-aksSpTenantId)
+        aks: $(dev-aks)
+- stage: production
+  displayName: production
+  condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'), eq(variables.deployToProduction, 'true'))
+  jobs:
+  - job: production
+    variables:
+      k8sNamespace: 'phippyandfriends'
+      # define 4 more variables: prd-aks, prd-aksSpId, prd-aksSpSecret and prd-aksSpTenantId in the pipeline definition UI
+    displayName: deploy helm chart into AKS
+    pool:
+      vmImage: $(vmImage)
+    steps:
+    - template: ../common/stage-steps-template.yml
+      parameters:
+        aksSpId: $(prd-aksSpId)
+        aksSpSecret: $(prd-aksSpSecret)
+        aksSpTenantId: $(prd-aksSpTenantId)
+        aks: $(prd-aks)
