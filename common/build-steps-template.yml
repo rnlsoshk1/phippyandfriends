@@ -18,11 +18,11 @@ steps:
   failOnStderr: true
   displayName: 'docker push'
   condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
-#- task: HelmInstaller@0
-#  displayName: 'install helm'
-#  inputs:
-#    helmVersion: $(helmVersion)
-#    checkLatestHelmVersion: false
+- task: HelmInstaller@0
+  displayName: 'install helm'
+  inputs:
+    helmVersion: $(helmVersion)
+    checkLatestHelmVersion: false
 - bash: |
     helm init \
         --client-only
