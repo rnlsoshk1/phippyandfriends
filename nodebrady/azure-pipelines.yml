@@ -12,7 +12,7 @@ trigger:
 
 variables:
   vmImage: 'ubuntu-16.04'
-  helmVersion: 1.14.2
+  helmVersion: 2.14.3
   projectName: nodebrady
   registryServerName: '$(registryName).azurecr.io'
   # define 3 more variables: registryName, registryLogin and registryPassword in the build pipeline in UI
