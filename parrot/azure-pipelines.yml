@@ -53,7 +53,7 @@ stages:
               aks: $(dev-aks)
 - stage: production
   displayName: production
-  condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'), eq(variables.deployToProduction, 'true'))
+  condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
   jobs:
   - deployment: production
     variables:
