@@ -33,35 +33,43 @@ stages:
   displayName: development
   condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
   jobs:
-  - job: development
+  - deployment: development
     variables:
       k8sNamespace: 'phippyandfriends'
       # define 4 more variables: dev-aks, dev-aksSpId, dev-aksSpSecret and dev-aksSpTenantId in the pipeline definition UI
     displayName: deploy helm chart into AKS
     pool:
       vmImage: $(vmImage)
-    steps:
-    - template: ../common/stage-steps-template.yml
-      parameters:
-        aksSpId: $(dev-aksSpId)
-        aksSpSecret: $(dev-aksSpSecret)
-        aksSpTenantId: $(dev-aksSpTenantId)
-        aks: $(dev-aks)
+    environment: "development"
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - template: ../common/stage-steps-template.yml
+            parameters:
+              aksSpId: $(dev-aksSpId)
+              aksSpSecret: $(dev-aksSpSecret)
+              aksSpTenantId: $(dev-aksSpTenantId)
+              aks: $(dev-aks)
 - stage: production
   displayName: production
   condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'), eq(variables.deployToProduction, 'true'))
   jobs:
-  - job: production
+  - deployment: production
     variables:
       k8sNamespace: 'phippyandfriends'
       # define 4 more variables: prd-aks, prd-aksSpId, prd-aksSpSecret and prd-aksSpTenantId in the pipeline definition UI
     displayName: deploy helm chart into AKS
     pool:
       vmImage: $(vmImage)
-    steps:
-    - template: ../common/stage-steps-template.yml
-      parameters:
-        aksSpId: $(prd-aksSpId)
-        aksSpSecret: $(prd-aksSpSecret)
-        aksSpTenantId: $(prd-aksSpTenantId)
-        aks: $(prd-aks)
+    environment: "production"
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - template: ../common/stage-steps-template.yml
+            parameters:
+              aksSpId: $(prd-aksSpId)
+              aksSpSecret: $(prd-aksSpSecret)
+              aksSpTenantId: $(prd-aksSpTenantId)
+              aks: $(prd-aks)
