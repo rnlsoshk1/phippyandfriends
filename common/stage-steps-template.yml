@@ -5,11 +5,10 @@ parameters:
   aks: ''
 
 steps:
-- task: HelmInstaller@0
+- task: HelmInstaller@1
   displayName: 'install helm'
   inputs:
-    helmVersion: $(helmVersion)
-    checkLatestHelmVersion: false
+    helmVersionToInstall: $(helmVersion)
 - download: current
   artifact: build-artifact
 - bash: |
