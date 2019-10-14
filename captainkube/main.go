@@ -25,7 +25,7 @@ type Pod struct {
 }
 
 func main() {
-	log.Println("Starting up Captain Kube")
+	log.Println("Starting up Captain Kube V2")
 	informerChannel := make(chan struct{})
 	go runinformer(informerChannel)
 
