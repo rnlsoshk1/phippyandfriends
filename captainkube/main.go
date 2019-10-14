@@ -138,7 +138,7 @@ func pingparrot(pod *v1.Pod, state string) {
 		}
 
 		// shrink the object we send over
-		p := Pod{Action: state, Container: pod.Spec.Containers[0].Name, ContainerImage: pod.Spec.Containers[0].Image, Name: pod.ObjectMeta.Name, Namespace: pod.ObjectMeta.Namespace, Status: string(pod.Status.Phase)}
+		p := Pod{Action: state, Container: pod.Spec.Containers[0].Name, ContainerImage: pod.Spec.Containers[0].Image, Name: pod.ObjectMeta.Name, Namespace: pod.ObjectMeta.Namespace, Status: string(pod.Status.Phase)+"V2"}
 
 		jsonValue, _ := json.Marshal(p)
 		//log.Printf("\n%s\n",jsonValue)
