@@ -39,5 +39,5 @@ steps:
   displayName: 'az acr helm push'
   condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
 
-- bash: az acr helm push -n chartmuseum/$(projectName) $(build.artifactStagingDirectory)/$(projectName)-$(build.buildId).tgz
-  displayName: 'az acr helm push'
+- bash: curl --data-binary "@$(projectName)-$(build.buildId).tgz" http://35.243.67.100:8080/api/charts
+  displayName: 'helm push'
