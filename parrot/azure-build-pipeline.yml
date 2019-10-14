@@ -38,3 +38,7 @@ steps:
 - bash: az acr helm push -n $(registryName) -u $(registryLogin) -p $(registryPassword) $(build.artifactStagingDirectory)/$(projectName)-$(build.buildId).tgz
   displayName: 'az acr helm push'
   condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
+
+- bash: az acr helm push -n chartmuseum/$(projectName) $(build.artifactStagingDirectory)/$(projectName)-$(build.buildId).tgz
+  displayName: 'az acr helm push'
+  condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
