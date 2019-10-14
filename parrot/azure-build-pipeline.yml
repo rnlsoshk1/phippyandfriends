@@ -32,11 +32,15 @@ steps:
   inputs:
     helmVersion: 2.14.1
 
+- bash: helm plugin install https://github.com/chartmuseum/helm-push
+  displayName: install plugin
+
 - bash: helm package --version $(build.buildId) --destination $(build.artifactStagingDirectory) $(system.defaultWorkingDirectory)/$(projectName)/charts/$(projectName)
   displayName: 'helm package'
-- bash: curl --data-binary "@$(projectName)-$(build.buildId).tgz" http://35.243.67.100:8080/api/charts
+
+- bash: helm push $(system.defaultWorkingDirectory)/$(projectName)/charts/$(projectName)/ chartmuseum
   displayName: 'helm push'
+
 - bash: az acr helm push -n $(registryName) -u $(registryLogin) -p $(registryPassword) $(build.artifactStagingDirectory)/$(projectName)-$(build.buildId).tgz
   displayName: 'az acr helm push'
   condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/master'))
-
