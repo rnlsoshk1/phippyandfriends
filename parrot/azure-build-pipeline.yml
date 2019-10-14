@@ -41,7 +41,7 @@ steps:
 - bash: helm repo add chartmuseum http://35.243.67.100:8080
   displayName: 'add chartmuseum'
 
-- bash: helm push $(system.defaultWorkingDirectory)/$(projectName)/charts/$(projectName)/ chartmuseum
+- bash: helm push $(build.artifactStagingDirectory)/$(projectName)-$(build.buildId).tgz chartmuseum
   displayName: 'helm push'
 
 - bash: az acr helm push -n $(registryName) -u $(registryLogin) -p $(registryPassword) $(build.artifactStagingDirectory)/$(projectName)-$(build.buildId).tgz
