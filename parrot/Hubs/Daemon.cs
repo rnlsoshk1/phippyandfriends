@@ -60,7 +60,8 @@ namespace parrot
             // not all images are tagged, so..
             if(pod.ContainerImage.Contains(':'))
                 pod.ContainerImage = pod.ContainerImage.Substring(0, pod.ContainerImage.IndexOf(':'));
-
+            if (pod.NameSpace != "phippyandfriends")
+                return ;
             if (Pods.Any(x => x.Name == pod.Name))
                 if (pod.Action == POD_DELETED_STATUS)
                     RemovePod(pod);
