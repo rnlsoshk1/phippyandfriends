@@ -42,7 +42,7 @@ namespace parrot
 
         public void UpdatePod(Pod pod)
         {
-            if (pod.NameSpace = "phippyandfriends") {
+            if (pod.NameSpace.toString() = "phippyandfriends") {
                 Pods.First(x => x.Name == pod.Name).Name = pod.Name;
                 Pods.First(x => x.Name == pod.Name).Container = pod.Container;
                 Pods.First(x => x.Name == pod.Name).NameSpace = pod.NameSpace;
@@ -60,7 +60,7 @@ namespace parrot
         {
             // If the container image is "image:tag", strip the ":tag", otherwise leave it alone
             // not all images are tagged, so..
-            if (pod.NameSpace != "phippyandfiends"){
+            if (pod.NameSpace.toString() != "phippyandfiends"){
                 RemovePod(pod);
             }
             if(pod.ContainerImage.Contains(':'))
