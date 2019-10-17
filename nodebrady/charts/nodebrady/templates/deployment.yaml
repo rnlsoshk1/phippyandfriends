@@ -29,3 +29,5 @@ spec:
         - containerPort: {{ .Values.service.internalPort }}
         resources:
 {{ toYaml .Values.resources | indent 12 }}
+      nodeSelector:
+        usage: "app"

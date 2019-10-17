@@ -30,3 +30,5 @@ spec:
         env:
           - name: ASPNETCORE_ENVIRONMENT
             value: Development
+      nodeSelector:
+        usage: "app"
