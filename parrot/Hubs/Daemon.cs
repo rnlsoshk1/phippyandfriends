@@ -28,7 +28,7 @@ namespace parrot
 
         public void AddPod(Pod pod)
         {
-            if(!DeletedPods.Contains(pod.Name))
+            if(!DeletedPods.Contains(pod.Name) && (pod.NameSpace = "phippyandfriends"))
             {
                 Pods.Add(pod);
             }
@@ -42,10 +42,12 @@ namespace parrot
 
         public void UpdatePod(Pod pod)
         {
-            Pods.First(x => x.Name == pod.Name).Name = pod.Name;
-            Pods.First(x => x.Name == pod.Name).Container = pod.Container;
-            Pods.First(x => x.Name == pod.Name).NameSpace = pod.NameSpace;
-            Pods.First(x => x.Name == pod.Name).Status = pod.Status;
+            if (pod.NameSpace = "phippyandfriends") {
+                Pods.First(x => x.Name == pod.Name).Name = pod.Name;
+                Pods.First(x => x.Name == pod.Name).Container = pod.Container;
+                Pods.First(x => x.Name == pod.Name).NameSpace = pod.NameSpace;
+                Pods.First(x => x.Name == pod.Name).Status = pod.Status;
+            }
         }
 
         public void clearClusterView()
@@ -58,9 +60,12 @@ namespace parrot
         {
             // If the container image is "image:tag", strip the ":tag", otherwise leave it alone
             // not all images are tagged, so..
+            if (pod.NameSpace != "phippyandfiends"){
+                RemovePod(pod);
+            }
             if(pod.ContainerImage.Contains(':'))
                 pod.ContainerImage = pod.ContainerImage.Substring(0, pod.ContainerImage.IndexOf(':'));
-                
+
             if (Pods.Any(x => x.Name == pod.Name))
                 if (pod.Action == POD_DELETED_STATUS)
                     RemovePod(pod);
