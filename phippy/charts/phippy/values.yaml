@@ -10,4 +10,4 @@ service:
   internalPort: 3333
 ingress:
   enabled: false
-  basedomain: #1d760aad894b4bd69d94.eastus.aksapp.io # replace with your own from the portal # replace with your own from the portal
+  #basedomain: #1d760aad894b4bd69d94.eastus.aksapp.io # replace with your own from the portal # replace with your own from the portal
