@@ -38,7 +38,7 @@ func runhealthz() {
 	// Start listening for health checks
 	mux := http.NewServeMux()
 	mux.HandleFunc("/healthz", func(w http.ResponseWriter, req *http.Request) {
-		checkReq, err := http.NewRequest(http.MethodGet, "http://40.71.93.212/", bytes.NewBuffer([]byte(``)))
+		checkReq, err := http.NewRequest(http.MethodGet, "http://parrot-parrot/", bytes.NewBuffer([]byte(``)))
 		httpclient := &http.Client{}
 		_, err = httpclient.Do(checkReq)
 		if err != nil {
