@@ -27,7 +27,7 @@ type Pod struct {
 const url string = "http://104.45.144.232"
 
 func main() {
-	log.Println("Starting up Captain Kube V3")
+	log.Println("Starting up Captain Kube")
 	informerChannel := make(chan struct{})
 	go runinformer(informerChannel)
 
@@ -40,7 +40,7 @@ func runhealthz() {
 	// Start listening for health checks
 	mux := http.NewServeMux()
 	mux.HandleFunc("/healthz", func(w http.ResponseWriter, req *http.Request) {
-		checkReq, err := http.NewRequest(http.MethodGet, url, bytes.NewBuffer([]byte(``)))
+		checkReq, err := http.NewRequest(http.MethodGet, "http://parrot-parrot/", bytes.NewBuffer([]byte(``)))
 		httpclient := &http.Client{}
 		_, err = httpclient.Do(checkReq)
 		if err != nil {
@@ -69,7 +69,7 @@ func runinformer(done chan struct{}) {
 	}
 
 	// Clear the cluster status, start with a blank slate
-	req, err := http.NewRequest(http.MethodDelete, url+"/api/ClusterStatus", bytes.NewBuffer([]byte(``)))
+	req, err := http.NewRequest(http.MethodDelete, "http://parrot-parrot/api/ClusterStatus", bytes.NewBuffer([]byte(``)))
 	httpclient := &http.Client{}
     _, err = httpclient.Do(req)
 	if err != nil {
@@ -127,7 +127,7 @@ func runinformer(done chan struct{}) {
 }
 
 func pingparrot(pod *v1.Pod, state string) {
-	if pod.ObjectMeta.Namespace != "kube-system" {
+	if pod.ObjectMeta.Namespace == "phippyandfriends" {
 		log.Printf("Pod %s: %s", state, pod.ObjectMeta.Name)
 		log.Printf("namespace: %s", pod.ObjectMeta.Namespace)
 		log.Printf("status: %s", pod.Status.Phase)
@@ -145,7 +145,7 @@ func pingparrot(pod *v1.Pod, state string) {
 		jsonValue, _ := json.Marshal(p)
 		//log.Printf("\n%s\n",jsonValue)
 
-		_, err := http.Post(url+"/api/ClusterStatus", "application/json", bytes.NewBuffer(jsonValue))
+		_, err := http.Post("http://parrot-parrot/api/ClusterStatus", "application/json", bytes.NewBuffer(jsonValue))
 		if err != nil {
 			log.Printf("The HTTP request failed with error %s", err)
 		} else {
