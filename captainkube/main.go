@@ -24,6 +24,8 @@ type Pod struct {
 	Action         string
 }
 
+const url string = "http://104.45.144.232"
+
 func main() {
 	log.Println("Starting up Captain Kube V3")
 	informerChannel := make(chan struct{})
@@ -38,7 +40,7 @@ func runhealthz() {
 	// Start listening for health checks
 	mux := http.NewServeMux()
 	mux.HandleFunc("/healthz", func(w http.ResponseWriter, req *http.Request) {
-		checkReq, err := http.NewRequest(http.MethodGet, "http://parrot-parrot/", bytes.NewBuffer([]byte(``)))
+		checkReq, err := http.NewRequest(http.MethodGet, url, bytes.NewBuffer([]byte(``)))
 		httpclient := &http.Client{}
 		_, err = httpclient.Do(checkReq)
 		if err != nil {
@@ -67,7 +69,7 @@ func runinformer(done chan struct{}) {
 	}
 
 	// Clear the cluster status, start with a blank slate
-	req, err := http.NewRequest(http.MethodDelete, "http://parrot-parrot/api/ClusterStatus", bytes.NewBuffer([]byte(``)))
+	req, err := http.NewRequest(http.MethodDelete, url+"/api/ClusterStatus", bytes.NewBuffer([]byte(``)))
 	httpclient := &http.Client{}
     _, err = httpclient.Do(req)
 	if err != nil {
@@ -143,7 +145,7 @@ func pingparrot(pod *v1.Pod, state string) {
 		jsonValue, _ := json.Marshal(p)
 		//log.Printf("\n%s\n",jsonValue)
 
-		_, err := http.Post("http://parrot-parrot/api/ClusterStatus", "application/json", bytes.NewBuffer(jsonValue))
+		_, err := http.Post(url+"/api/ClusterStatus", "application/json", bytes.NewBuffer(jsonValue))
 		if err != nil {
 			log.Printf("The HTTP request failed with error %s", err)
 		} else {
