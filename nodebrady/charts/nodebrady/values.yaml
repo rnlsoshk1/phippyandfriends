@@ -6,5 +6,5 @@ service:
   internalPort: 3000
   externalPort: 80
 ingress:
-  enabled: false
-  #basedomain: CHANGE_TO_YOUR_DNS.REGION.aksapp.io # replace with your own from the portal
+  enabled: true
+  basedomain: 1d760aad894b4bd69d94.eastus.aksapp.io # replace with your own from the portal
